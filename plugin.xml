@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-printer-SGT88iV-plugin"
+        version="0.0.1">
+    <name>SGT-88iV Receipt Printer Plugin</name>
+    <description>Print receipts using USB printer.</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,plugin,receipt printer,SGT-88iV</keywords>
+    <repo></repo>
+    <issue></issue>
+ 
+    <engines>
+        <engine name="cordova-android" version=">=3.6.0" /><!-- Requires CordovaPlugin.preferences -->
+    </engines>
+
+ 
+    <js-module src="www/plugin.js" name="receiptPrinter">
+        <runs/>
+    </js-module>
+    
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="SGT88iVPrinterPlugin" >
+                <param name="android-package" value="com.crowdblink.cordova.printer"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/SGT-88iV-Printer.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/UsbOperation.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/libs/AndroidPrinterSDK3.0.jar" target-dir="libs" framework="true"/>
+    </platform>
+
+</plugin>
