@@ -36,6 +36,7 @@ public class SGT88iVPrinterPlugin extends CordovaPlugin{
 	private IPrinterOpertion myOperation;
 	private PrinterInstance mPrinter;
 	
+	//used for asynchronous callbacks to the plugin
 	private CallbackContext callback = null;
 	
 	@Override
