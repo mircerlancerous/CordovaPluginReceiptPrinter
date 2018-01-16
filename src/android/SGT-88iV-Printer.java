@@ -86,7 +86,7 @@ public class SGT88iVPrinterPlugin extends CordovaPlugin{
 		}
 	};
 
-	private void openConn(connect){
+	private void openConn(boolean connect){
 		if(connect && !isConnected){
 			myOperation = new UsbOperation(MainActivity.this, mHandler);
 			myOperation.chooseDevice();
