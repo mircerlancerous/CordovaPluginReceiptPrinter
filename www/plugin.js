@@ -25,5 +25,13 @@ Plugin.receiptPrinter = {
 
 	openCashBox: function(callback, onFail){
 		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'openCashBox', []);
+	},
+
+	getUSBDevices: function(callback, onFail){
+		var onAction = function(response){
+			var parts = JSON.parse(response);
+			callback(parts);
+		};
+		cordova.exec(onAction, onFail, 'SGT88iVPrinterPlugin', 'getUSBDevices', []);
 	}
 };

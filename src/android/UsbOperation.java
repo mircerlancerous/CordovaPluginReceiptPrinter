@@ -38,11 +38,37 @@ public class UsbOperation{
 		filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 	}
 	
+	public String getUSBDevices(Activity activity){
+		String json = "[";
+		int count = 0;
+		UsbManager usbManager = (UsbManager)activity.getSystemService(Context.USB_SERVICE);
+		HashMap<String, UsbDevice> deviceList = usbManager.getDeviceList();
+		Iterator<UsbDevice> deviceIterator = deviceList.values().iterator();
+		while(deviceIterator.hasNext()){
+			if(count > 0){
+				json += ",";
+			}
+			count++;
+			UsbDevice device = deviceIterator.next();
+			json += "{\"Model\":\""+device.getDeviceName()+"\",";
+			json += "\"DeviceID\":\""+device.getDeviceId()+"\",";
+			json += "\"VendorID\":\""+device.getVendorId()+"\",";
+			json += "\"ProductID\":\""+device.getProductId()+"\",";
+			json += "\"Class\":\""+device.getDeviceClass()+"\",";
+			json += "\"Subclass\":\""+device.getDeviceSubclass()+"\",";
+			json += "\"isPrinter\":\""+String.valueOf(USBPort.isUsbPrinter(device))+"\"}";
+		}
+		json += "]";
+		return json;
+    }
+	
 	private UsbDevice doDiscovery(Activity activity){
     	UsbManager manager = (UsbManager)activity.getSystemService(Context.USB_SERVICE);
     	HashMap<String, UsbDevice> devices = manager.getDeviceList();
     	for(UsbDevice device : devices.values()){
+    		Log.i(TAG, "list device: " + device.getDeviceName());
     		if(USBPort.isUsbPrinter(device)){
+    			Log.i(TAG, "found printer: " + device.getDeviceName());
     			return device;
 			}
 		}

@@ -137,6 +137,9 @@ public class SGT88iVPrinter extends CordovaPlugin{
 			else if(action.equalsIgnoreCase("openCashBox")){
 				openCashBox();
 			}
+			else if(action.equalsIgnoreCase("getUSBDevices")){
+				
+			}
 			else{
 				found = false;
 			}
@@ -190,6 +193,12 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		if(success){
 			printText(value);
 		}
+		callbackContext.sendPluginResult(result);
+	}
+	
+	private void JSgetUSBDevices(CallbackContext callbackContext){
+		String json = myOperation.getUSBDevices(cordova.getActivity());
+		PluginResult result = new PluginResult(PluginResult.Status.OK,json);
 		callbackContext.sendPluginResult(result);
 	}
 
