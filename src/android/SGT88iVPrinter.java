@@ -93,7 +93,7 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	private void openConn(boolean connect){
 		if(connect && !isConnected){
 			myOperation = new UsbOperation(this.cordova.getActivity().getApplicationContext(), mHandler);//MainActivity.this, mHandler);
-			myOperation.chooseDevice();
+			myOperation.open();
 		}
 		else if(!connect && isConnected){
 			myOperation.close();

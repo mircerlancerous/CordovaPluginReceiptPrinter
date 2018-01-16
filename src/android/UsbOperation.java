@@ -12,7 +12,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.android.print.sdk.PrinterInstance;
+import com.android.print.sdk.usb.USBPort;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class UsbOperation{
@@ -33,13 +37,28 @@ public class UsbOperation{
 		filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
 		filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 	}
+	
+	private UsbDevice doDiscovery(){
+    	UsbManager manager = (UsbManager)getSystemService(Context.USB_SERVICE);
+    	HashMap<String, UsbDevice> devices = manager.getDeviceList();
+    	for(UsbDevice device : devices.values()){
+    		if(USBPort.isUsbPrinter(device)){
+    			return device;
+			}
+		}
+		return null;
+    }
 
-	public void open(Intent data) {
-		mDevice = data.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+	public boolean open() {
+		mDevice = doDiscovery();
+		if(mDevice == null){
+			return false;
+		}
 		mPrinter = new PrinterInstance(mContext, mDevice, mHandler);
 		// default is gbk...
 		// mPrinter.setEncoding("gbk");
 		mPrinter.openConnection();
+		return true;
 	}
 
 	public void close() {
