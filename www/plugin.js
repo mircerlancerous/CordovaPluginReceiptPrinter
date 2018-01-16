@@ -1,6 +1,11 @@
 Plugin.receiptPrinter = {
-	open: function(callback, onFail){
-		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'connect', []);
+	open: function(callback, onFail, Productid){
+		if(typeof(Productid) === 'undefined'){
+			cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'connect', []);
+		}
+		else{
+			cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'openByProductId', [Productid]);
+		}
 	},
 
 	close: function(callback, onFail){

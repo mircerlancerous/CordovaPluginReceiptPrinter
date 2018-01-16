@@ -34,7 +34,7 @@ import com.android.print.sdk.PrinterConstants.Command;
 import com.android.print.sdk.PrinterConstants.Connect;
 import com.android.print.sdk.PrinterInstance;
 import com.android.print.sdk.Barcode;
-import com.android.print.sdk.FontProperty;
+//import com.android.print.sdk.FontProperty;
 
 public class SGT88iVPrinter extends CordovaPlugin{
 	private static boolean isConnected;
@@ -49,14 +49,15 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		public void handleMessage(Message msg){
 			boolean success = true;
 			switch(msg.what){
-				case Connect.SUCCESS:
+				case Connect.SUCCESS:		//101
 					isConnected = true;
 					mPrinter = myOperation.getPrinter();
 					break;
-				case Connect.FAILED:
+				case Connect.FAILED:		//102
+					success = false;
 					isConnected = false;
 					break;
-				case Connect.CLOSED:
+				case Connect.CLOSED:		//103
 					isConnected = false;
 					break;
 				default:
@@ -64,9 +65,9 @@ public class SGT88iVPrinter extends CordovaPlugin{
 					break;
 			}
 			if(callback != null){
-				PluginResult result = new PluginResult(PluginResult.Status.OK,"");
+				PluginResult result = new PluginResult(PluginResult.Status.OK,"handler success: "+msg.what);
 				if(!success){
-					result = new PluginResult(PluginResult.Status.ERROR,"unknown error connecting/disconnecting");
+					result = new PluginResult(PluginResult.Status.ERROR,"error connecting/disconnecting: "+msg.what);
 				}
 				callback.sendPluginResult(result);
 				callback = null;
@@ -75,31 +76,19 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	};
 
 	private void openConn(boolean connect){
-		if(connect && !isConnected){
-			myOperation = new UsbOperation(this.cordova.getActivity().getApplicationContext(), mHandler);//MainActivity.this, mHandler);
-			boolean success = myOperation.open(cordova.getActivity());
+		if(connect){
+			myOperation = new UsbOperation(cordova.getActivity(), mHandler);
+			boolean success = myOperation.open();
 			if(!success){
 				PluginResult result = new PluginResult(PluginResult.Status.ERROR,"can't find printer");
 				callback.sendPluginResult(result);
 				callback = null;
 			}
 		}
-		else if(!connect && isConnected){
+		else{
 			myOperation.close();
 			myOperation = null;
 			mPrinter = null;
-		}
-		else if(callback != null){
-			String msg = "already ";
-			if(isConnected){
-				msg += "connected";
-			}
-			else{
-				msg += "disconnected";
-			}
-			PluginResult result = new PluginResult(PluginResult.Status.ERROR,msg);
-			callback.sendPluginResult(result);
-			callback = null;
 		}
 	}
 	
@@ -108,6 +97,7 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 		super.initialize(cordova, webView);
+		isConnected = false;
 	}
     
 	@Override
@@ -138,14 +128,17 @@ public class SGT88iVPrinter extends CordovaPlugin{
 				openCashBox();
 			}
 			else if(action.equalsIgnoreCase("getUSBDevices")){
-				
+				JSgetUSBDevices(callbackContext);
+			}
+			else if(action.equalsIgnoreCase("openByProductId")){
+				JSopenByProductId(callbackContext, data);
 			}
 			else{
 				found = false;
 			}
 		}
-		catch (Exception e){
-			PluginResult result = new PluginResult(PluginResult.Status.ERROR,"Action: "+e.getMessage());
+		catch(Exception e){
+			PluginResult result = new PluginResult(PluginResult.Status.ERROR,"Action Error: "+e);
 			callbackContext.sendPluginResult(result);
 		}
 		return found;
@@ -197,9 +190,33 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	}
 	
 	private void JSgetUSBDevices(CallbackContext callbackContext){
-		String json = myOperation.getUSBDevices(cordova.getActivity());
+		String json = myOperation.getUSBDevices();
 		PluginResult result = new PluginResult(PluginResult.Status.OK,json);
 		callbackContext.sendPluginResult(result);
+	}
+	
+	private void JSopenByProductId(CallbackContext callbackContext, JSONArray data){
+		int ProductId = 0;
+		try{
+			ProductId = data.getInt(0);
+		}
+		catch(JSONException e){
+			PluginResult result = new PluginResult(PluginResult.Status.ERROR,"JSON:"+e.getMessage());
+			callbackContext.sendPluginResult(result);
+			return;
+		}
+		boolean success = myOperation.setDevice(ProductId);
+		if(!success){
+			PluginResult result = new PluginResult(PluginResult.Status.ERROR,"error setting printer");
+			if(ProductId == 0){
+				result = new PluginResult(PluginResult.Status.OK,"printer unset");
+			}
+			callbackContext.sendPluginResult(result);
+			return;
+		}
+		
+		callback = callbackContext;
+		openConn(true);
 	}
 
 /**************************************************************************************/
