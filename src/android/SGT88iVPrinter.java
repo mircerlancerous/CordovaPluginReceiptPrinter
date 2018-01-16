@@ -44,22 +44,6 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	//used for asynchronous callbacks to the plugin
 	private CallbackContext callback = null;
 	
-	@Override
-	protected void onActivityResult(final int requestCode, int resultCode, final Intent data) {
-	//	switch(requestCode){
-	//        case CONNECT_DEVICE:
-	            if(resultCode == Activity.RESULT_OK){
-	            	new Thread(new Runnable(){
-	                    public void run(){
-	                    	myOperation.open(data);
-	                    }
-	                }).start();
-	            }
-	 /*       	break;
-	        default:break;
-        }*/
-	}
-
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg){

@@ -50,7 +50,7 @@ public class UsbOperation{
     }
 
 	public boolean open(Activity activity) {
-		mDevice = doDiscovery();
+		mDevice = doDiscovery(activity);
 		if(mDevice == null){
 			return false;
 		}
