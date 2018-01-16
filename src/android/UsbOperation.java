@@ -79,11 +79,4 @@ public class UsbOperation implements IPrinterOpertion {
 		}
 		return mPrinter;
 	}
-
-	@Override
-	public void chooseDevice() {
-		Intent intent = new Intent(mContext, UsbDeviceList.class);
-		((Activity) mContext).startActivityForResult(intent,
-				MainActivity.CONNECT_DEVICE);
-	}
 }

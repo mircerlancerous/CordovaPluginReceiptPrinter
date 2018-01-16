@@ -28,8 +28,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.android.print.sdk.PrinterType;
+import com.android.print.sdk.PrinterConstants.BarcodeType;
+import com.android.print.sdk.PrinterConstants.Command;
 import com.android.print.sdk.PrinterConstants.Connect;
 import com.android.print.sdk.PrinterInstance;
+import com.android.print.sdk.Barcode;
+import com.android.print.sdk.FontProperty;
 
 public class SGT88iVPrinterPlugin extends CordovaPlugin{
 	private static boolean isConnected;
@@ -41,19 +46,18 @@ public class SGT88iVPrinterPlugin extends CordovaPlugin{
 	
 	@Override
 	protected void onActivityResult(final int requestCode, int resultCode, final Intent data) {
-		switch(requestCode){
-	        case CONNECT_DEVICE:
+	//	switch(requestCode){
+	//        case CONNECT_DEVICE:
 	            if(resultCode == Activity.RESULT_OK){
-	            	dialog.show();
 	            	new Thread(new Runnable(){
 	                    public void run(){
 	                    	myOperation.open(data);
 	                    }
 	                }).start();
 	            }
-	        	break;
+	 /*       	break;
 	        default:break;
-        }
+        }*/
 	}
 
 	private Handler mHandler = new Handler(){
