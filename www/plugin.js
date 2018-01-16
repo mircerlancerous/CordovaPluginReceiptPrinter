@@ -1,11 +1,6 @@
 Plugin.receiptPrinter = {
-	open: function(callback, onFail, Productid){
-		if(typeof(Productid) === 'undefined'){
-			cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'connect', []);
-		}
-		else{
-			cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'openByProductId', [Productid]);
-		}
+	open: function(callback, onFail){
+		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'connect', []);
 	},
 
 	close: function(callback, onFail){
@@ -26,17 +21,5 @@ Plugin.receiptPrinter = {
 
 	cutPaper: function(callback, onFail){
 		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'cutPaper', []);
-	},
-
-	openCashBox: function(callback, onFail){
-		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'openCashBox', []);
-	},
-
-	getUSBDevices: function(callback, onFail){
-		var onAction = function(response){
-			var parts = JSON.parse(response);
-			callback(parts);
-		};
-		cordova.exec(onAction, onFail, 'SGT88iVPrinterPlugin', 'getUSBDevices', []);
 	}
 };

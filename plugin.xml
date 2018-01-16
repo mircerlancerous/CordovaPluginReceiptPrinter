@@ -28,8 +28,12 @@
         </config-file>
 
         <source-file src="src/android/SGT88iVPrinter.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/UsbOperation.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/libs/AndroidPrinterSDK3.0.jar" target-dir="libs" framework="true"/>
+        <source-file src="src/android/USBPort.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/PrinterInstance.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/Barcode.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/Utils.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/PrinterConstants.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/Table.java" target-dir="src/com/crowdblink/cordova/printer"/>
     </platform>
 
 </plugin>

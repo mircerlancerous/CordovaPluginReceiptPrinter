@@ -28,17 +28,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.android.print.sdk.PrinterType;
-import com.android.print.sdk.PrinterConstants.BarcodeType;
-import com.android.print.sdk.PrinterConstants.Command;
-import com.android.print.sdk.PrinterConstants.Connect;
-import com.android.print.sdk.PrinterInstance;
-import com.android.print.sdk.Barcode;
-//import com.android.print.sdk.FontProperty;
+import com.crowdblink.cordova.printer.PrinterInstance;
+import com.crowdblink.cordova.printer.PrinterConstants.BarcodeType;
+import com.crowdblink.cordova.printer.PrinterConstants.Command;
+import com.crowdblink.cordova.printer.PrinterConstants.Connect;
+import com.crowdblink.cordova.printer.Barcode;
+
+import android.util.Log;
 
 public class SGT88iVPrinter extends CordovaPlugin{
 	private static boolean isConnected;
-	private UsbOperation myOperation;
 	private PrinterInstance mPrinter;
 	
 	//used for asynchronous callbacks to the plugin
@@ -51,7 +50,6 @@ public class SGT88iVPrinter extends CordovaPlugin{
 			switch(msg.what){
 				case Connect.SUCCESS:		//101
 					isConnected = true;
-					mPrinter = myOperation.getPrinter();
 					break;
 				case Connect.FAILED:		//102
 					success = false;
@@ -77,17 +75,11 @@ public class SGT88iVPrinter extends CordovaPlugin{
 
 	private void openConn(boolean connect){
 		if(connect){
-			myOperation = new UsbOperation(cordova.getActivity(), mHandler);
-			boolean success = myOperation.open();
-			if(!success){
-				PluginResult result = new PluginResult(PluginResult.Status.ERROR,"can't find printer");
-				callback.sendPluginResult(result);
-				callback = null;
-			}
+			mPrinter = new PrinterInstance(cordova.getActivity(), mHandler);
+			mPrinter.openConnection();
 		}
 		else{
-			myOperation.close();
-			myOperation = null;
+			mPrinter.closeConnection();
 			mPrinter = null;
 		}
 	}
@@ -127,12 +119,6 @@ public class SGT88iVPrinter extends CordovaPlugin{
 			else if(action.equalsIgnoreCase("openCashBox")){
 				openCashBox();
 			}
-			else if(action.equalsIgnoreCase("getUSBDevices")){
-				JSgetUSBDevices(callbackContext);
-			}
-			else if(action.equalsIgnoreCase("openByProductId")){
-				JSopenByProductId(callbackContext, data);
-			}
 			else{
 				found = false;
 			}
@@ -167,7 +153,9 @@ public class SGT88iVPrinter extends CordovaPlugin{
 			result = new PluginResult(PluginResult.Status.ERROR,"JSON:"+e.getMessage());
 		}
 		if(success){
-			printBarcode(type,value);
+			if(!printBarcode(type,value)){
+				result = new PluginResult(PluginResult.Status.ERROR,"error printing barcode: "+type);
+			}
 		}
 		callbackContext.sendPluginResult(result);
 	}
@@ -188,36 +176,6 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		}
 		callbackContext.sendPluginResult(result);
 	}
-	
-	private void JSgetUSBDevices(CallbackContext callbackContext){
-		String json = myOperation.getUSBDevices();
-		PluginResult result = new PluginResult(PluginResult.Status.OK,json);
-		callbackContext.sendPluginResult(result);
-	}
-	
-	private void JSopenByProductId(CallbackContext callbackContext, JSONArray data){
-		int ProductId = 0;
-		try{
-			ProductId = data.getInt(0);
-		}
-		catch(JSONException e){
-			PluginResult result = new PluginResult(PluginResult.Status.ERROR,"JSON:"+e.getMessage());
-			callbackContext.sendPluginResult(result);
-			return;
-		}
-		boolean success = myOperation.setDevice(ProductId);
-		if(!success){
-			PluginResult result = new PluginResult(PluginResult.Status.ERROR,"error setting printer");
-			if(ProductId == 0){
-				result = new PluginResult(PluginResult.Status.OK,"printer unset");
-			}
-			callbackContext.sendPluginResult(result);
-			return;
-		}
-		
-		callback = callbackContext;
-		openConn(true);
-	}
 
 /**************************************************************************************/
 	
@@ -236,15 +194,16 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		mPrinter.openCashbox(true,true);
 	}
 	
-	private void printBarcode(String type, String value){
+	private boolean printBarcode(String type, String value){
 		mPrinter.init();
 		mPrinter.setCharacterMultiple(0, 0);
 		mPrinter.setLeftMargin(15, 0);
+		Log.w("Plugin",type+": "+value);
 		Barcode barcode = null;
 		if(type == "CODE39"){
 			barcode = new Barcode(BarcodeType.CODE39, 2, 150, 2, value);
 		}
-		else if(type ==	"Code128"){
+		else if(type ==	"CODE128"){
 			barcode = new Barcode(BarcodeType.CODE128, 2, 150, 2, value);
 		}
 		else if(type == "PDF417"){
@@ -256,7 +215,9 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		if(barcode != null){
 			mPrinter.printBarCode(barcode);
 			mPrinter.setPrinter(Command.PRINT_AND_WAKE_PAPER_BY_LINE, 1);
+			return true;
 		}
+		return false;
 	}
 	
 	private void printImage(Bitmap bitmap, boolean convertToBW){
