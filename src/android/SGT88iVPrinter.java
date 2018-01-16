@@ -36,7 +36,7 @@ import com.android.print.sdk.PrinterInstance;
 import com.android.print.sdk.Barcode;
 import com.android.print.sdk.FontProperty;
 
-public class SGT88iVPrinterPlugin extends CordovaPlugin{
+public class SGT88iVPrinter extends CordovaPlugin{
 	private static boolean isConnected;
 	private IPrinterOpertion myOperation;
 	private PrinterInstance mPrinter;
