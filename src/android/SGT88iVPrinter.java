@@ -93,7 +93,12 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	private void openConn(boolean connect){
 		if(connect && !isConnected){
 			myOperation = new UsbOperation(this.cordova.getActivity().getApplicationContext(), mHandler);//MainActivity.this, mHandler);
-			myOperation.open();
+			boolean success = myOperation.open(cordova.getActivity());
+			if(!success){
+				PluginResult result = new PluginResult(PluginResult.Status.ERROR,"can't find printer");
+				callback.sendPluginResult(result);
+				callback = null;
+			}
 		}
 		else if(!connect && isConnected){
 			myOperation.close();

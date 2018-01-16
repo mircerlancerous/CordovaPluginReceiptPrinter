@@ -38,8 +38,8 @@ public class UsbOperation{
 		filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 	}
 	
-	private UsbDevice doDiscovery(){
-    	UsbManager manager = (UsbManager)getSystemService(Context.USB_SERVICE);
+	private UsbDevice doDiscovery(Activity activity){
+    	UsbManager manager = (UsbManager)activity.getSystemService(Context.USB_SERVICE);
     	HashMap<String, UsbDevice> devices = manager.getDeviceList();
     	for(UsbDevice device : devices.values()){
     		if(USBPort.isUsbPrinter(device)){
@@ -49,7 +49,7 @@ public class UsbOperation{
 		return null;
     }
 
-	public boolean open() {
+	public boolean open(Activity activity) {
 		mDevice = doDiscovery();
 		if(mDevice == null){
 			return false;
