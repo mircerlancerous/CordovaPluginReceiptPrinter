@@ -38,7 +38,7 @@ import com.android.print.sdk.FontProperty;
 
 public class SGT88iVPrinter extends CordovaPlugin{
 	private static boolean isConnected;
-	private IPrinterOpertion myOperation;
+	private UsbOperation myOperation;
 	private PrinterInstance mPrinter;
 	
 	//used for asynchronous callbacks to the plugin
@@ -92,7 +92,7 @@ public class SGT88iVPrinter extends CordovaPlugin{
 
 	private void openConn(boolean connect){
 		if(connect && !isConnected){
-			myOperation = new UsbOperation(MainActivity.this, mHandler);
+			myOperation = new UsbOperation(this.cordova.getActivity().getApplicationContext(), mHandler);//MainActivity.this, mHandler);
 			myOperation.chooseDevice();
 		}
 		else if(!connect && isConnected){
@@ -137,10 +137,10 @@ public class SGT88iVPrinter extends CordovaPlugin{
 				JSisConnected(callbackContext);
 			}
 			else if(action.equalsIgnoreCase("printBarcode")){
-				JSprintBarcode(callbackContext);
+				JSprintBarcode(callbackContext, data);
 			}
 			else if(action.equalsIgnoreCase("printText")){
-				JSprintText(callbackContext);
+				JSprintText(callbackContext, data);
 			}
 			else if(action.equalsIgnoreCase("cutPaper")){
 				cutPaper();
@@ -226,20 +226,17 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		mPrinter.setCharacterMultiple(0, 0);
 		mPrinter.setLeftMargin(15, 0);
 		Barcode barcode = null;
-		switch(type){
-			case "CODE39":
-				barcode = new Barcode(BarcodeType.CODE39, 2, 150, 2, value);
-				break;
-			case "Code128":
-				barcode = new Barcode(BarcodeType.CODE128, 2, 150, 2, value);
-				break;
-			case "PDF417":
-				barcode = new Barcode(BarcodeType.PDF417, 2, 3, 6, value);
-				break;
-			case "QRCODE":
-				barcode = new Barcode(BarcodeType.QRCODE, 2, 3, 6, value);
-				break;
-			default:break;
+		if(type == "CODE39"){
+			barcode = new Barcode(BarcodeType.CODE39, 2, 150, 2, value);
+		}
+		else if(type ==	"Code128"){
+			barcode = new Barcode(BarcodeType.CODE128, 2, 150, 2, value);
+		}
+		else if(type == "PDF417"){
+			barcode = new Barcode(BarcodeType.PDF417, 2, 3, 6, value);
+		}
+		else if(type == "QRCODE"){
+			barcode = new Barcode(BarcodeType.QRCODE, 2, 3, 6, value);
 		}
 		if(barcode != null){
 			mPrinter.printBarCode(barcode);

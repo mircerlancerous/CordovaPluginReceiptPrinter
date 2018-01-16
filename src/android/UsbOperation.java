@@ -15,7 +15,7 @@ import android.util.Log;
 import com.android.print.sdk.PrinterInstance;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-public class UsbOperation implements IPrinterOpertion {
+public class UsbOperation{
 	private final static String TAG = "UsbOpertion";
 	private Context mContext;
 	private Handler mHandler;
