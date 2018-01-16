@@ -160,7 +160,7 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	
 	private void JSprintBarcode(CallbackContext callbackContext, JSONArray data){
 		PluginResult result = new PluginResult(PluginResult.Status.OK,"");
-		String type, value;
+		String type = "", value = "";
 	    boolean success = false;
 		try{
 			type = data.getString(0);
@@ -178,7 +178,7 @@ public class SGT88iVPrinter extends CordovaPlugin{
 	
 	private void JSprintText(CallbackContext callbackContext, JSONArray data){
 		PluginResult result = new PluginResult(PluginResult.Status.OK,"");
-		String value;
+		String value = "";
 	    boolean success = false;
 		try{
 			value = data.getString(0);
