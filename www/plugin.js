@@ -21,5 +21,9 @@ Plugin.receiptPrinter = {
 
 	cutPaper: function(callback, onFail){
 		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'cutPaper', []);
+	},
+
+	openCashBox: function(callback, onFail){
+		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'openCashBox', []);
 	}
 };

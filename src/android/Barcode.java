@@ -54,10 +54,13 @@ public class Barcode
     switch (barcodeType)
     {
     case 100: 
-    case 101: 
-    case 102: 
+    case 101:
       realCommand = getBarcodeCommand2(content, barcodeType, param1, param2, param3);
-      break;
+      break; 
+    case 102:
+    	realCommand = getQRCodeCommand(content, param1, param2, param3);
+    	
+    	break;
     case 73: 
       byte[] tempCommand = new byte['Ѐ'];
       int index = 0;
@@ -249,4 +252,55 @@ public class Barcode
     
     return command;
   }
+  
+	private byte[] getQRCodeCommand(String content, int param1, int param2, int param3){
+		byte[] tmpByte = new byte[0];
+		try{
+			if(charsetName != ""){
+				tmpByte = content.getBytes(charsetName);
+			}
+			else{
+				tmpByte = content.getBytes();
+			}
+		}
+		catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+			return null;
+		}
+		if(tmpByte.length == 0){
+			return null;
+		}
+		int i = tmpByte.length + 8 + 8;
+		byte[] command = new byte[i + 8 + 8];
+		//command 167 - set the size of the QR code
+		command[0] = 29;
+		command[1] = 40;
+		command[2] = 107;
+		command[3] = 3;
+		command[4] = 0;
+		command[5] = 49;
+		command[6] = 67;
+		command[7] = 3;
+		//command 180 - load the QR Code buffer with data
+		command[8] = 29;
+		command[9] = 40;
+		command[10] = 107;
+		command[11] = ((byte)(tmpByte.length % 256));	//pL
+		command[12] = ((byte)(tmpByte.length / 256));	//pH
+		command[13] = 49;		//cn
+		command[14] = 80;		//fn
+		command[15] = 48;		//m
+		System.arraycopy(tmpByte, 0, command, 10, tmpByte.length);
+		//command 181 - print QR Code from data in buffer
+		command[i] = 29;
+		command[i+1] = 40;
+		command[i+2] = 107;
+		command[i+3] = 3;
+		command[i+4] = 0;
+		command[i+5] = 49;
+		command[i+6] = 81;
+		command[i+7] = 48;
+		
+		return command;
+	}
 }

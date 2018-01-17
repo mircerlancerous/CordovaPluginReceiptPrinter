@@ -109,35 +109,38 @@ public class PrinterInstance implements Serializable
   {
     byte[] arrayOfByte = null;
     switch (command) {
-    case 0: 
-      arrayOfByte = new byte[2];
-      arrayOfByte[0] = 27;
-      arrayOfByte[1] = 64;
-      break;
-    case 1: 
-      arrayOfByte = new byte[1];
-      arrayOfByte[0] = 0;
-      break;
-    case 2: 
-      arrayOfByte = new byte[1];
-      arrayOfByte[0] = 12;
-      break;
-    case 3: 
-      arrayOfByte = new byte[1];
-      arrayOfByte[0] = 10;
-      break;
-    case 4: 
-      arrayOfByte = new byte[1];
-      arrayOfByte[0] = 13;
-      break;
-    case 5: 
-      arrayOfByte = new byte[1];
-      arrayOfByte[0] = 9;
-      break;
-    case 6: 
-      arrayOfByte = new byte[2];
-      arrayOfByte[0] = 27;
-      arrayOfByte[1] = 50;
+    	//ESC @
+	    case 0: 
+	      arrayOfByte = new byte[2];
+	      arrayOfByte[0] = 27;
+	      arrayOfByte[1] = 64;
+	      break;
+	    //NULL
+	    case 1: 
+	      arrayOfByte = new byte[1];
+	      arrayOfByte[0] = 0;
+	      break;
+	    
+	    case 2: 
+	      arrayOfByte = new byte[1];
+	      arrayOfByte[0] = 12;
+	      break;
+	    case 3: 
+	      arrayOfByte = new byte[1];
+	      arrayOfByte[0] = 10;
+	      break;
+	    case 4: 
+	      arrayOfByte = new byte[1];
+	      arrayOfByte[0] = 13;
+	      break;
+	    case 5: 
+	      arrayOfByte = new byte[1];
+	      arrayOfByte[0] = 9;
+	      break;
+	    case 6: 
+	      arrayOfByte = new byte[2];
+	      arrayOfByte[0] = 27;
+	      arrayOfByte[1] = 50;
     }
     
     sendByteData(arrayOfByte);
@@ -231,33 +234,6 @@ public class PrinterInstance implements Serializable
     
     arrayOfByte[2] = ((byte)nL);
     arrayOfByte[3] = ((byte)nH);
-    sendByteData(arrayOfByte);
-  }
-  
-  public void setPrintModel(boolean isBold, boolean isDoubleHeight, boolean isDoubleWidth, boolean isUnderLine)
-  {
-    byte[] arrayOfByte = new byte[3];
-    arrayOfByte[0] = 27;
-    arrayOfByte[1] = 33;
-    
-    int a = 0;
-    if (isBold) {
-      a += 8;
-    }
-    
-    if (isDoubleHeight) {
-      a += 16;
-    }
-    
-    if (isDoubleHeight) {
-      a += 32;
-    }
-    
-    if (isDoubleHeight) {
-      a += 128;
-    }
-    
-    arrayOfByte[2] = ((byte)a);
     sendByteData(arrayOfByte);
   }
   

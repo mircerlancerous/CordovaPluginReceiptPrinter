@@ -200,16 +200,16 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		mPrinter.setLeftMargin(15, 0);
 		Log.w("Plugin",type+": "+value);
 		Barcode barcode = null;
-		if(type == "CODE39"){
+		if(type.equalsIgnoreCase("CODE39")){
 			barcode = new Barcode(BarcodeType.CODE39, 2, 150, 2, value);
 		}
-		else if(type ==	"CODE128"){
+		else if(type.equalsIgnoreCase("CODE128")){
 			barcode = new Barcode(BarcodeType.CODE128, 2, 150, 2, value);
 		}
-		else if(type == "PDF417"){
+		else if(type.equalsIgnoreCase("PDF417")){
 			barcode = new Barcode(BarcodeType.PDF417, 2, 3, 6, value);
 		}
-		else if(type == "QRCODE"){
+		else if(type.equalsIgnoreCase("QRCODE")){
 			barcode = new Barcode(BarcodeType.QRCODE, 2, 3, 6, value);
 		}
 		if(barcode != null){
