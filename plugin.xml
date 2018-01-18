@@ -14,7 +14,6 @@
         <engine name="cordova-android" version=">=3.6.0" /><!-- Requires CordovaPlugin.preferences -->
     </engines>
 
- 
     <js-module src="www/plugin.js" name="receiptPrinter">
         <runs/>
     </js-module>
@@ -25,6 +24,10 @@
                 <param name="android-package" value="com.crowdblink.cordova.printer.SGT88iVPrinter"/>
                 <param name="onload" value="true" />
             </feature>
+        </config-file>
+        
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+        	<uses-feature android:name="android.hardware.usb.host"/>
         </config-file>
 
         <source-file src="src/android/SGT88iVPrinter.java" target-dir="src/com/crowdblink/cordova/printer"/>

@@ -1,0 +1,142 @@
+//https://github.com/mike42/escpos-php/blob/development/src/Mike42/Escpos/Printer.php
+
+class Printer{
+	/**
+	 * ASCII group separator control character
+	 */
+	const GS = "\x1d";
+	/**
+	 * Indicates error correction level L when used with Printer::qrCode
+	 */
+	const QR_ECLEVEL_L = 0;
+	/**
+	 * Indicates error correction level M when used with Printer::qrCode
+	 */
+	const QR_ECLEVEL_M = 1;
+	/**
+	 * Indicates error correction level Q when used with Printer::qrCode
+	 */
+	const QR_ECLEVEL_Q = 2;
+	/**
+	 * Indicates error correction level H when used with Printer::qrCode
+	 */
+	const QR_ECLEVEL_H = 3;
+	/**
+	 * Indicates QR model 1 when used with Printer::qrCode
+	 */
+	const QR_MODEL_1 = 1;
+	/**
+	 * Indicates QR model 2 when used with Printer::qrCode
+	 */
+	const QR_MODEL_2 = 2;
+	/**
+	 * Indicates micro QR code when used with Printer::qrCode
+	 */
+	const QR_MICRO = 3;
+
+
+	/**
+	 * Print the given data as a QR code on the printer.
+	 *
+	 * @param string $content The content of the code. Numeric data will be more efficiently compacted.
+	 * @param int $ec Error-correction level to use. One of Printer::QR_ECLEVEL_L (default), Printer::QR_ECLEVEL_M, Printer::QR_ECLEVEL_Q or Printer::QR_ECLEVEL_H. Higher error correction results in a less compact code.
+	 * @param int $size Pixel size to use. Must be 1-16 (default 3)
+	 * @param int $model QR code model to use. Must be one of Printer::QR_MODEL_1, Printer::QR_MODEL_2 (default) or Printer::QR_MICRO (not supported by all printers).
+	 */
+	public function qrCode($content, $ec = Printer::QR_ECLEVEL_L, $size = 3, $model = Printer::QR_MODEL_2)
+	{
+	    self::validateString($content, __FUNCTION__);
+	    self::validateInteger($ec, 0, 3, __FUNCTION__);
+	    self::validateInteger($size, 1, 16, __FUNCTION__);
+	    self::validateInteger($model, 1, 3, __FUNCTION__);
+	    if ($content == "") {
+	        return;
+	    }
+	    if (!$this -> profile -> getSupportsQrCode()) {
+	        // TODO use software rendering via phpqrcode instead
+	        throw new Exception("QR codes are not supported on your printer.");
+	    }
+	    $cn = '1'; // Code type for QR code
+	    // Select model: 1, 2 or micro.
+	    $this -> wrapperSend2dCodeData(chr(65), $cn, chr(48 + $model) . chr(0));
+	    // Set dot size.
+	    $this -> wrapperSend2dCodeData(chr(67), $cn, chr($size));
+	    // Set error correction level: L, M, Q, or H
+	    $this -> wrapperSend2dCodeData(chr(69), $cn, chr(48 + $ec));
+	    // Send content & print
+	    $this -> wrapperSend2dCodeData(chr(80), $cn, $content, '0');
+	    $this -> wrapperSend2dCodeData(chr(81), $cn, '', '0');
+	}
+
+
+	/**
+	 * Wrapper for GS ( k, to calculate and send correct data length.
+	 *
+	 * @param string $fn Function to use
+	 * @param string $cn Output code type. Affects available data
+	 * @param string $data Data to send.
+	 * @param string $m Modifier/variant for function. Often '0' where used.
+	 * @throws InvalidArgumentException Where the input lengths are bad.
+	 */
+	protected function wrapperSend2dCodeData($fn, $cn, $data = '', $m = '')
+	{
+	    if (strlen($m) > 1 || strlen($cn) != 1 || strlen($fn) != 1) {
+	        throw new InvalidArgumentException("wrapperSend2dCodeData: cn and fn must be one character each.");
+	    }
+	    $header = $this -> intLowHigh(strlen($data) + strlen($m) + 2, 2);
+	    $this -> connector -> write(self::GS . "(k" . $header . $cn . $fn . $m . $data);
+	}
+
+
+	/**
+	 * Generate two characters for a number: In lower and higher parts, or more parts as needed.
+	 *
+	 * @param int $input Input number
+	 * @param int $length The number of bytes to output (1 - 4).
+	 */
+	protected static function intLowHigh($input, $length)
+	{
+	    $maxInput = (256 << ($length * 8) - 1);
+	    self::validateInteger($length, 1, 4, __FUNCTION__);
+	    self::validateInteger($input, 0, $maxInput, __FUNCTION__);
+	    $outp = "";
+	    for ($i = 0; $i < $length; $i++) {
+	        $outp .= chr($input % 256);
+	        $input = (int)($input / 256);
+	    }
+	    return $outp;
+	}
+	
+	
+	
+	
+	
+	
+    /**
+     * ASCII escape control character
+     */
+    const ESC = "\x1b";
+	/**
+     * Align text to the left, when used with Printer::setJustification
+     */
+    const JUSTIFY_LEFT = 0;
+    /**
+     * Center text, when used with Printer::setJustification
+     */
+    const JUSTIFY_CENTER = 1;
+    /**
+     * Align text to the right, when used with Printer::setJustification
+     */
+    const JUSTIFY_RIGHT = 2;
+    
+    /**
+     * Select justification.
+     *
+     * @param int $justification One of Printer::JUSTIFY_LEFT, Printer::JUSTIFY_CENTER, or Printer::JUSTIFY_RIGHT.
+     */
+    public function setJustification($justification = Printer::JUSTIFY_LEFT)
+    {
+        self::validateInteger($justification, 0, 2, __FUNCTION__);
+        $this -> connector -> write(self::ESC . "a" . chr($justification));
+    }
+}
