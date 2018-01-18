@@ -78,9 +78,14 @@ public class SGT88iVPrinter extends CordovaPlugin{
 			mPrinter = new PrinterInstance(cordova.getActivity(), mHandler);
 			mPrinter.openConnection();
 		}
-		else{
+		else if(mPrinter != null){
 			mPrinter.closeConnection();
 			mPrinter = null;
+		}
+		else if(callback != null){
+			PluginResult result = new PluginResult(PluginResult.Status.OK,"already disconnected");
+			callback.sendPluginResult(result);
+			callback = null;
 		}
 	}
 	
@@ -111,7 +116,10 @@ public class SGT88iVPrinter extends CordovaPlugin{
 				JSprintBarcode(callbackContext, data);
 			}
 			else if(action.equalsIgnoreCase("printText")){
-				JSprintText(callbackContext, data);
+				JSprintText(callbackContext, data, false);
+			}
+			else if(action.equalsIgnoreCase("command")){
+				JSprintText(callbackContext, data, true);
 			}
 			else if(action.equalsIgnoreCase("cutPaper")){
 				cutPaper();
@@ -160,7 +168,7 @@ public class SGT88iVPrinter extends CordovaPlugin{
 		callbackContext.sendPluginResult(result);
 	}
 	
-	private void JSprintText(CallbackContext callbackContext, JSONArray data){
+	private void JSprintText(CallbackContext callbackContext, JSONArray data, boolean isCommand){
 		PluginResult result = new PluginResult(PluginResult.Status.OK,"");
 		String value = "";
 	    boolean success = false;
@@ -172,12 +180,21 @@ public class SGT88iVPrinter extends CordovaPlugin{
 			result = new PluginResult(PluginResult.Status.ERROR,"JSON:"+e.getMessage());
 		}
 		if(success){
-			printText(value);
+			if(!isCommand){
+				printText(value);
+			}
+			else{
+				command(value);
+			}
 		}
 		callbackContext.sendPluginResult(result);
 	}
 
 /**************************************************************************************/
+	
+	private void command(String value){
+		mPrinter.printText(value);
+	}
 	
 	private void printText(String value){
 		mPrinter.init();

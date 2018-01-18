@@ -14,6 +14,10 @@ Plugin.receiptPrinter = {
 	printText: function(callback, onFail, value){
 		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'printText', [value]);
 	},
+	
+	command: function(callback, onFail, value){
+		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'command', [value]);
+	},
 
 	printBarcode: function(callback, onFail, type, value){
 		cordova.exec(callback, onFail, 'SGT88iVPrinterPlugin', 'printBarcode', [type, value]);
