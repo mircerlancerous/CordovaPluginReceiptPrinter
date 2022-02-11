@@ -200,6 +200,7 @@ public class USBPort{
 	private boolean isUsbPrinter(UsbDevice device){
 		int vendorId = device.getVendorId();
 		int productId = device.getProductId();
+		int classId = device.getDeviceClass();
 		Log.w(TAG, "device name: " + device.getDeviceName());
 		Log.w(TAG, "vid:" + vendorId + " pid:" + productId + " class:" + classId);
 		if((1155 == vendorId && 22304 == productId) ||
