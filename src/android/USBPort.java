@@ -201,7 +201,7 @@ public class USBPort{
 		int vendorId = device.getVendorId();
 		int productId = device.getProductId();
 		Log.w(TAG, "device name: " + device.getDeviceName());
-		Log.w(TAG, "vid:" + vendorId + " pid:" + productId);
+		Log.w(TAG, "vid:" + vendorId + " pid:" + productId + " class:" + classId);
 		if((1155 == vendorId && 22304 == productId) ||
 			(1659 == vendorId && 8965 == productId) ||
 			(4070 == vendorId && 33054 == productId)){
