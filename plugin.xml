@@ -21,7 +21,7 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="ReceiptPrinterPlugin" >
-                <param name="android-package" value="com.crowdblink.cordova.printer.ReceiptPrinter"/>
+                <param name="android-package" value="com.offthebricks.cordova.printer.ReceiptPrinter"/>
                 <param name="onload" value="true" />
             </feature>
         </config-file>
@@ -30,13 +30,13 @@
         	<uses-feature android:name="android.hardware.usb.host"/>
         </config-file>
 
-        <source-file src="src/android/ReceiptPrinter.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/USBPort.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/PrinterInstance.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/Barcode.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/Utils.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/PrinterConstants.java" target-dir="src/com/crowdblink/cordova/printer"/>
-        <source-file src="src/android/Table.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/ReceiptPrinter.java" target-dir="src/com/cordova/printer"/>
+        <source-file src="src/android/USBPort.java" target-dir="src/com/cordova/printer"/>
+        <source-file src="src/android/PrinterInstance.java" target-dir="src/com/cordova/printer"/>
+        <source-file src="src/android/Barcode.java" target-dir="src/com/cordova/printer"/>
+        <source-file src="src/android/Utils.java" target-dir="src/com/cordova/printer"/>
+        <source-file src="src/android/PrinterConstants.java" target-dir="src/com/cordova/printer"/>
+        <source-file src="src/android/Table.java" target-dir="src/com/cordova/printer"/>
     </platform>
 
 </plugin>
