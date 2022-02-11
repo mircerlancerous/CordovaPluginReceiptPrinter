@@ -36,7 +36,7 @@ import com.crowdblink.cordova.printer.Barcode;
 
 import android.util.Log;
 
-public class SGT88iVPrinter extends CordovaPlugin{
+public class ReceiptPrinter extends CordovaPlugin{
 	private static boolean isConnected;
 	private PrinterInstance mPrinter;
 	
