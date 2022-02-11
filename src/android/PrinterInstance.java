@@ -1,11 +1,11 @@
-package com.crowdblink.cordova.printer;
+package com.offthebricks.cordova.printer;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Handler;
 
-import com.crowdblink.cordova.printer.USBPort;
-import com.crowdblink.cordova.printer.Utils;
+import com.offthebricks.cordova.printer.USBPort;
+import com.offthebricks.cordova.printer.Utils;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;

@@ -1,4 +1,4 @@
-package com.crowdblink.cordova.printer;
+package com.offthebricks.cordova.printer;
 
 import android.app.Activity;
 import android.app.PendingIntent;

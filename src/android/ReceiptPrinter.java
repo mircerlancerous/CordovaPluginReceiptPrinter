@@ -1,4 +1,4 @@
-package com.crowdblink.cordova.printer;
+package com.offthebricks.cordova.printer;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -28,11 +28,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.crowdblink.cordova.printer.PrinterInstance;
-import com.crowdblink.cordova.printer.PrinterConstants.BarcodeType;
-import com.crowdblink.cordova.printer.PrinterConstants.Command;
-import com.crowdblink.cordova.printer.PrinterConstants.Connect;
-import com.crowdblink.cordova.printer.Barcode;
+import com.offthebricks.cordova.printer.PrinterInstance;
+import com.offthebricks.cordova.printer.PrinterConstants.BarcodeType;
+import com.offthebricks.cordova.printer.PrinterConstants.Command;
+import com.offthebricks.cordova.printer.PrinterConstants.Connect;
+import com.offthebricks.cordova.printer.Barcode;
 
 import android.util.Log;
 

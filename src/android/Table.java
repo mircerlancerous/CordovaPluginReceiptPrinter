@@ -1,6 +1,6 @@
-package com.crowdblink.cordova.printer;
+package com.offthebricks.cordova.printer;
 
-import com.crowdblink.cordova.printer.Utils;
+import com.offthebricks.cordova.printer.Utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

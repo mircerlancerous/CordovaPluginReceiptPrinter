@@ -1,4 +1,4 @@
-package com.crowdblink.cordova.printer;
+package com.offthebricks.cordova.printer;
 
 public class PrinterConstants
 {
