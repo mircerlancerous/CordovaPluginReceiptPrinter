@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="cordova-printer-SGT88iV-plugin"
+        id="cordova-printer-receipt-plugin"
         version="0.0.1">
-    <name>SGT-88iV Receipt Printer Plugin</name>
+    <name>Receipt Printer Plugin</name>
     <description>Print receipts using USB printer.</description>
     <license>Apache 2.0</license>
-    <keywords>cordova,plugin,receipt printer,SGT-88iV</keywords>
+    <keywords>cordova,plugin,receipt,printer</keywords>
     <repo></repo>
     <issue></issue>
  
@@ -20,8 +20,8 @@
     
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="SGT88iVPrinterPlugin" >
-                <param name="android-package" value="com.crowdblink.cordova.printer.SGT88iVPrinter"/>
+            <feature name="ReceiptPrinterPlugin" >
+                <param name="android-package" value="com.crowdblink.cordova.printer.ReceiptPrinter"/>
                 <param name="onload" value="true" />
             </feature>
         </config-file>
@@ -30,7 +30,7 @@
         	<uses-feature android:name="android.hardware.usb.host"/>
         </config-file>
 
-        <source-file src="src/android/SGT88iVPrinter.java" target-dir="src/com/crowdblink/cordova/printer"/>
+        <source-file src="src/android/ReceiptPrinter.java" target-dir="src/com/crowdblink/cordova/printer"/>
         <source-file src="src/android/USBPort.java" target-dir="src/com/crowdblink/cordova/printer"/>
         <source-file src="src/android/PrinterInstance.java" target-dir="src/com/crowdblink/cordova/printer"/>
         <source-file src="src/android/Barcode.java" target-dir="src/com/crowdblink/cordova/printer"/>
