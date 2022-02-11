@@ -1,0 +1,23 @@
+{
+  "name": "cordova-printer-receipt-plugin",
+  "version": "1.0.0",
+  "description": "Receipt Printer Service Plugin",
+  "cordova": {
+    "id": "cordova-printer-receipt-plugin",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "receipt",
+    "printer",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Mircerlancerous <mircerlancerous@offthebricks.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}
