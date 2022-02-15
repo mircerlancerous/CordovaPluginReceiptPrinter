@@ -57,9 +57,16 @@ public class USBPort{
 	
 	public void open()
 	{
-		Log.d(TAG, "connect to: " + mUsbDevice.getDeviceName());
+		Log.d(TAG, "attempting to connect to USB printer");
+		
 		if (mState != 103) {
+			Log.d(TAG, "connection aborted, state = 103");
 			close();
+			return;
+		}
+		
+		if(mUsbDevice != null){
+			Log.d(TAG, "connect to: " + mUsbDevice.getDeviceName());
 		}
 		
 		if (isUsbPrinter(mUsbDevice))
