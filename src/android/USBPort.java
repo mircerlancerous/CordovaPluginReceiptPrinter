@@ -65,10 +65,15 @@ public class USBPort{
 			return;
 		}
 		
-		if(mUsbDevice != null){
-			Log.d(TAG, "connect to: " + mUsbDevice.getDeviceName());
+		if(mUsbDevice == null){
+			mUsbDevice = findPrinter();
+			if(mUsbDevice == null){
+				Log.d(TAG, "connection aborted, no printer detected");
+				return;
+			}
 		}
 		
+		Log.d(TAG, "connect to: " + mUsbDevice.getDeviceName());
 		if (isUsbPrinter(mUsbDevice))
 		{
 			if (mUsbManager.hasPermission(mUsbDevice))
