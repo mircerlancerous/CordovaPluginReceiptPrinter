@@ -30,13 +30,13 @@
         	<uses-feature android:name="android.hardware.usb.host"/>
         </config-file>
 
-        <source-file src="src/android/ReceiptPrinter.java" target-dir="src/com/cordova/printer"/>
-        <source-file src="src/android/USBPort.java" target-dir="src/com/cordova/printer"/>
-        <source-file src="src/android/PrinterInstance.java" target-dir="src/com/cordova/printer"/>
-        <source-file src="src/android/Barcode.java" target-dir="src/com/cordova/printer"/>
-        <source-file src="src/android/Utils.java" target-dir="src/com/cordova/printer"/>
-        <source-file src="src/android/PrinterConstants.java" target-dir="src/com/cordova/printer"/>
-        <source-file src="src/android/Table.java" target-dir="src/com/cordova/printer"/>
+        <source-file src="src/android/ReceiptPrinter.java" target-dir="src/com/offthebricks/cordova/printer"/>
+        <source-file src="src/android/USBPort.java" target-dir="src/com/offthebricks/cordova/printer"/>
+        <source-file src="src/android/PrinterInstance.java" target-dir="src/com/offthebricks/cordova/printer"/>
+        <source-file src="src/android/Barcode.java" target-dir="src/com/offthebricks/cordova/printer"/>
+        <source-file src="src/android/Utils.java" target-dir="src/com/offthebricks/cordova/printer"/>
+        <source-file src="src/android/PrinterConstants.java" target-dir="src/com/offthebricks/cordova/printer"/>
+        <source-file src="src/android/Table.java" target-dir="src/com/offthebricks/cordova/printer"/>
     </platform>
 
 </plugin>
