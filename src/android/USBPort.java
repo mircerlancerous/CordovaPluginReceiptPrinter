@@ -123,7 +123,9 @@ public class USBPort{
 			
 			if (mUsbManager.hasPermission(mUsbDevice)) {
 				try {
-					usbInterface = mUsbDevice.getInterface(0);
+					if(usbInterface == null){
+						usbInterface = mUsbDevice.getInterface(0);
+					}
 					for (int i = 0; i < usbInterface.getEndpointCount(); i++)
 					{
 						UsbEndpoint ep = usbInterface.getEndpoint(i);
@@ -209,6 +211,20 @@ public class USBPort{
 		//https://www.usb.org/defined-class-codes
 		if(classId == 7){
 			return true;
+		}
+		if(classId == 0){
+			//generic class, so need to look at interfaces
+			int count = device.getInterfaceCount();
+			UsbInterface devInt;
+			for(int i=0; i<count; i++){
+				devInt = device.getInterface(i);
+				classId = devInt.getInterfaceClass();
+				Log.w(TAG, "int-name: " + devInt.getName() + ", int-class:" + classId);
+				if(classId == 7){
+					usbInterface = devInt;
+					return true;
+				}
+			}
 		}
 		return false;
 	}
