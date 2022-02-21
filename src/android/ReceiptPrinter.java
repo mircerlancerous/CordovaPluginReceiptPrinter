@@ -35,6 +35,7 @@ import com.offthebricks.cordova.printer.PrinterConstants.Connect;
 import com.offthebricks.cordova.printer.Barcode;
 
 import android.util.Log;
+import android.util.Base64;
 
 public class ReceiptPrinter extends CordovaPlugin{
 	private static boolean isConnected;
@@ -118,6 +119,9 @@ public class ReceiptPrinter extends CordovaPlugin{
 			else if(action.equalsIgnoreCase("printText")){
 				JSprintText(callbackContext, data, false);
 			}
+			else if(action.equalsIgnoreCase("printImage")){
+				JSprintImage(callbackContext, data);
+			}
 			else if(action.equalsIgnoreCase("command")){
 				JSprintText(callbackContext, data, true);
 			}
@@ -186,6 +190,28 @@ public class ReceiptPrinter extends CordovaPlugin{
 			else{
 				command(value);
 			}
+		}
+		callbackContext.sendPluginResult(result);
+	}
+	
+	private void JSprintImage(CallbackContext callbackContext, JSONArray data){
+		PluginResult result = new PluginResult(PluginResult.Status.OK,"");
+		boolean success = false;
+		Bitmap decodedByte = null;
+		try{
+			String encodedImage = data.getString(0);
+			byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+			decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+			success = true;
+		}
+		catch(JSONException e){
+			result = new PluginResult(PluginResult.Status.ERROR,"JSON:"+e.getMessage());
+		}
+		catch(Exception e){
+			result = new PluginResult(PluginResult.Status.ERROR,"Exception:"+e.getMessage());
+		}
+		if(success){
+			printImage(decodedByte, true);
 		}
 		callbackContext.sendPluginResult(result);
 	}
