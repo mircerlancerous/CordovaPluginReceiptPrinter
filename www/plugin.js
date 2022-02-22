@@ -19,26 +19,30 @@ Plugin.receiptPrinter = {
 		cordova.exec(callback, onFail, 'ReceiptPrinter', 'command', [value]);
 	},
 
-	printBarcode: function(callback, onFail, type, value){
+	printBarcode: function(callback, onFail, code_type, value){
 		try{
-			let code = parseInt(type);
-			type = code;
+			let code = parseInt(code_type);
+			code_type = code;
 		}
 		catch(e){
-			switch(type.toUpperCase()){
+			if(typeof(code_type) !== 'string'){
+				onFail("invalid barcode type: must be int or string code");
+				return;
+			}
+			switch(code_type.toUpperCase()){
 				case "CODE128":
-					type = 73;
+					code_type = 73;
 					break;
 				case "CODE39":
-					type = 4;
+					code_type = 4;
 					break;
 				case "QRCODE":
 				default:
-					type = 102;
+					code_type = 102;
 					break;
 			}
 		}
-		cordova.exec(callback, onFail, 'ReceiptPrinter', 'printBarcode', [type, value]);
+		cordova.exec(callback, onFail, 'ReceiptPrinter', 'printBarcode', [code_type, value]);
 	},
 	
 	printImage: function(callback, onFail, b64Image){
