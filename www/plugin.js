@@ -44,7 +44,7 @@ Plugin.receiptPrinter = {
 	printImage: function(callback, onFail, b64Image){
 		//remove url component if it exists
 		var data = "base64,";
-		var pos = base64url.indexOf(data);
+		var pos = b64Image.indexOf(data);
 		if(pos >= 0){
 			data = b64Image.substring(pos + data.length);
 		}
